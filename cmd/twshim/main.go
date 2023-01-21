@@ -8,6 +8,7 @@ import (
 
 func main() {
 	l := log.New(os.Stderr, "twshim: ", 0)
+	twshim.Log = l
 
 	// Fail early if architecture is not supported.
 	assetName, err := twshim.RuntimeAssetName()

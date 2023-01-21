@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -14,12 +15,32 @@ import (
 
 const baseReleaseURL = "https://api.github.com/repos/tailwindlabs/tailwindcss/releases" // without trailing slash
 
+// Logger interface used by twshim to log. Set Log to the desired Logger.
+type Logger interface {
+	Printf(format string, v ...any)
+}
+
+// make sure, log.Logger satisfies our interface
+var _ Logger = &log.Logger{}
+
+// Log is the Logger used by twshim. If Log = nil, twshim will use a log.Logger by default.
+// To disable logging, set it to log.New(io.Discard, "", 0).
+var Log Logger
+
+func l() Logger {
+	if Log == nil {
+		Log = log.New(os.Stderr, "twshim: ", log.LstdFlags)
+	}
+	return Log
+}
+
 // Command returns an exec.Cmd ready for execution.
 // If the binary of the given release does not exist in downloadRoot, it is downloaded first.
 func Command(downloadRoot, releaseTag, assetName string, arg ...string) (*exec.Cmd, error) {
 	dir := path.Join(downloadRoot, releaseTag)
 	bin := path.Join(dir, assetName)
 	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		l().Printf("downloading %s", bin)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return nil, err
 		}

@@ -45,7 +45,7 @@ func Command(downloadRoot, releaseTag, assetName string, arg ...string) (*exec.C
 			return nil, err
 		}
 		if err := DownloadCLI(releaseTag, assetName, bin); err != nil {
-			return nil, fmt.Errorf("downloading tailwing %s: %w", releaseTag, err)
+			return nil, fmt.Errorf("downloading tailwind %s: %w", releaseTag, err)
 		}
 	} else if err != nil {
 		return nil, err

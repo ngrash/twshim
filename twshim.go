@@ -53,6 +53,7 @@ func Command(downloadRoot, releaseTag, assetName string, arg ...string) (*exec.C
 
 	cmd := exec.Command(bin, arg...)
 	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 
 	return cmd, nil

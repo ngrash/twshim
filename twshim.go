@@ -67,7 +67,7 @@ func RuntimeAssetName() (string, error) {
 	case "linux/amd64":
 		return "tailwindcss-linux-x64", nil
 	case "windows/amd64":
-		return "tailwindcss-windows-x64", nil
+		return "tailwindcss-windows-x64.exe", nil
 	default:
 		return "", fmt.Errorf("distribution not supported: %s", dist)
 	}
